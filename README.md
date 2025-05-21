@@ -1,7 +1,8 @@
-Welcome
+# WELLCOME
 This Laravel app is built for educational purposes and serves as part of my portfolio.
 
-What do I bring to the table?
+# What do I bring to the table?
+
 🧩 Laravel Modules
 We use modular architecture to make the app more organized, scalable, and easier to maintain.
 
