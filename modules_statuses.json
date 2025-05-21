@@ -1,3 +1,5 @@
 {
-    "Authentication": true
+    "Authentication": true,
+    "Import": true,
+    "User": true
 }
