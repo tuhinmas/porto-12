@@ -1,56 +1,82 @@
 <?php
-
 namespace Modules\Authentication\Http\Controllers;
 
-use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Routing\Controller;
 
 class AuthenticationController extends Controller
 {
     /**
-     * Display a listing of the resource.
+     * Create a new AuthController instance.
+     *
+     * @return void
      */
-    public function index()
+    public function __construct()
     {
-        return view('authentication::index');
+        $this->middleware('auth:api', ['except' => ['login']]);
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Get a JWT via given credentials.
+     *
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function create()
+    public function login()
     {
-        return view('authentication::create');
+        $credentials = request(['email', 'password']);
+
+        if (! $token = auth()->attempt($credentials)) {
+            return response()->json(['error' => 'Unauthorized'], 401);
+        }
+
+        return $this->respondWithToken($token);
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Get the authenticated User.
+     *
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function store(Request $request) {}
-
-    /**
-     * Show the specified resource.
-     */
-    public function show($id)
+    public function me()
     {
-        return view('authentication::show');
+        return response()->json(auth()->user());
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * Log the user out (Invalidate the token).
+     *
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function edit($id)
+    public function logout()
     {
-        return view('authentication::edit');
+        auth()->logout();
+
+        return response()->json(['message' => 'Successfully logged out']);
     }
 
     /**
-     * Update the specified resource in storage.
+     * Refresh a token.
+     *
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function update(Request $request, $id) {}
+    public function refresh()
+    {
+        return $this->respondWithToken(auth()->refresh());
+    }
 
     /**
-     * Remove the specified resource from storage.
+     * Get the token array structure.
+     *
+     * @param  string $token
+     *
+     * @return \Illuminate\Http\JsonResponse
      */
-    public function destroy($id) {}
+    protected function respondWithToken($token)
+    {
+        return response()->json([
+            'access_token' => $token,
+            'token_type'   => 'bearer',
+            'expires_in'   => auth()->factory()->getTTL() * 60,
+        ]);
+    }
 }

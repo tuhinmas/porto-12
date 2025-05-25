@@ -3,6 +3,12 @@
 use Illuminate\Support\Facades\Route;
 use Modules\Authentication\Http\Controllers\AuthenticationController;
 
-Route::middleware(['auth:sanctum'])->prefix('v1')->group(function () {
-    Route::apiResource('authentications', AuthenticationController::class)->names('authentication');
+Route::group([
+    'middleware' => 'api',
+    'prefix'     => 'auth',
+], function ($router) {
+    Route::post('login', [AuthenticationController::class, 'login']);
+    Route::post('logout', [AuthenticationController::class, 'logout']);
+    Route::post('refresh', [AuthenticationController::class, 'refresh']);
+    Route::post('me', [AuthenticationController::class, 'me']);
 });
