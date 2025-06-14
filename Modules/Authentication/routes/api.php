@@ -5,7 +5,7 @@ use Modules\Authentication\Http\Controllers\AuthenticationController;
 
 Route::group([
     'middleware' => 'auth',
-    'prefix'     => 'auth',
+    'prefix' => 'auth',
 ], function ($router) {
     Route::post('login', [AuthenticationController::class, 'login']);
     Route::post('logout', [AuthenticationController::class, 'logout']);

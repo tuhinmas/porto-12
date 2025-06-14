@@ -1,7 +1,7 @@
 <?php
+
 namespace Modules\Authentication\Http\Controllers;
 
-use Illuminate\Http\Request;
 use Illuminate\Routing\Controller;
 
 class AuthenticationController extends Controller
@@ -67,16 +67,15 @@ class AuthenticationController extends Controller
     /**
      * Get the token array structure.
      *
-     * @param  string $token
-     *
+     * @param  string  $token
      * @return \Illuminate\Http\JsonResponse
      */
     protected function respondWithToken($token)
     {
         return response()->json([
             'access_token' => $token,
-            'token_type'   => 'bearer',
-            'expires_in'   => auth()->factory()->getTTL() * 60,
+            'token_type' => 'bearer',
+            'expires_in' => auth()->factory()->getTTL() * 60,
         ]);
     }
 }

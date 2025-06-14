@@ -3,6 +3,10 @@
 use Illuminate\Support\Facades\Route;
 use Modules\Import\Http\Controllers\ImportController;
 
-Route::middleware(['auth:sanctum'])->prefix('v1')->group(function () {
-    Route::apiResource('imports', ImportController::class)->names('import');
+Route::group([
+    'middleware' => 'auth',
+    'prefix' => 'imports',
+], function ($router) {
+    Route::post('reguler', [ImportController::class, 'reguler']);
+    Route::post('', [ImportController::class, 'login']);
 });
