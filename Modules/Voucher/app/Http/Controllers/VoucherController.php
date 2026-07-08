@@ -1,56 +1,66 @@
 <?php
-
 namespace Modules\Voucher\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use Illuminate\Http\JsonResponse;
 use Illuminate\Http\Request;
+use Modules\Voucher\Services\VoucherService;
 
 class VoucherController extends Controller
 {
-    /**
-     * Display a listing of the resource.
-     */
-    public function index()
+    public function __construct(protected VoucherService $voucherService)
+    {}
+
+    public function index(Request $request): JsonResponse
     {
-        return view('voucher::index');
+        $vouchers = $this->voucherService->list([
+            'organization_id' => $request->query('organization_id'),
+            'store_id'        => $request->query('store_id'),
+            'search'          => $request->query('search'),
+        ]);
+
+        return response()->json($vouchers);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     */
-    public function create()
+    public function store(Request $request): JsonResponse
     {
-        return view('voucher::create');
+        $voucher = $this->voucherService->create($request->all());
+
+        return response()->json($voucher, 201);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     */
-    public function store(Request $request) {}
-
-    /**
-     * Show the specified resource.
-     */
-    public function show($id)
+    public function show(string $id): JsonResponse
     {
-        return view('voucher::show');
+        $voucher = $this->voucherService->find((int) $id);
+
+        if (! $voucher) {
+            return response()->json(['message' => 'Voucher not found'], 404);
+        }
+
+        return response()->json($voucher);
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     */
-    public function edit($id)
+    public function update(Request $request, string $id): JsonResponse
     {
-        return view('voucher::edit');
+        $voucher = $this->voucherService->update((int) $id, $request->all());
+
+        if (! $voucher) {
+            return response()->json(['message' => 'Voucher not found'], 404);
+        }
+
+        return response()->json($voucher);
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, $id) {}
+    public function destroy(string $id): JsonResponse
+    {
+        $voucher = $this->voucherService->find((int) $id);
 
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy($id) {}
+        if (! $voucher) {
+            return response()->json(['message' => 'Voucher not found'], 404);
+        }
+
+        $voucher->delete();
+
+        return response()->json(null, 204);
+    }
 }

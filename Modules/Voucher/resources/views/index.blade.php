@@ -1,5 +1,6 @@
 <x-voucher::layouts.master>
-    <h1>Hello World</h1>
-
-    <p>Module: {!! config('voucher.name') !!}</p>
+    <div class="container">
+        <h1>Voucher Module</h1>
+        <p>Voucher functionality from zycash_be_v2 has been wired into this module.</p>
+    </div>
 </x-voucher::layouts.master>
