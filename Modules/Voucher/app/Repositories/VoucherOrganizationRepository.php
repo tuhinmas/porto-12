@@ -1,10 +1,11 @@
 <?php
 namespace Modules\Voucher\Repositories;
 
+use Modules\Voucher\Contracts\VoucherOrganizationRepositoryInterface;
 use Modules\Voucher\DTO\VoucherPayload;
 use Modules\Voucher\Models\VoucherOrganization;
 
-class VoucherOrganizationRepository
+class VoucherOrganizationRepository implements VoucherOrganizationRepositoryInterface
 {
     public function create(VoucherPayload $payload): VoucherOrganization
     {

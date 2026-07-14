@@ -2,10 +2,11 @@
 namespace Modules\Voucher\Repositories;
 
 use Illuminate\Database\Eloquent\Collection;
+use Modules\Voucher\Contracts\VoucherRepositoryInterface;
 use Modules\Voucher\DTO\VoucherPayload;
 use Modules\Voucher\Models\Voucher;
 
-class VoucherRepository
+class VoucherRepository implements VoucherRepositoryInterface
 {
     public function list(array $filters = []): Collection
     {
